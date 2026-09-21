@@ -3,60 +3,33 @@ from app.fight import Fight
 from app.constants import KNIGHTS
 
 
+def build_knight(knight: dict):
+    data = Knight(knight["name"], knight["power"], knight["hp"])
+    data.battle_preparation(
+        knight["armour"],
+        knight["weapon"],
+        knight["potion"],
+    )
+    return data
+
+
 def battle(knights_config: dict) -> dict:
-    lancelot_data = knights_config["lancelot"]
+    knights = {}
 
-    lancelot = Knight(
-        lancelot_data["name"], lancelot_data["power"], lancelot_data["hp"]
-    )
-    lancelot.battle_preparation(
-        lancelot_data["armour"],
-        lancelot_data["weapon"],
-        lancelot_data["potion"],
-    )
+    for key, value in knights_config.items():
+        knights[key] = build_knight(value)
 
-    arthur_data = knights_config["arthur"]
+    Fight.fight(knights["lancelot"], knights["mordred"])
+    Fight.fight(knights["red_knight"], knights["arthur"])
 
-    arthur = Knight(
-        arthur_data["name"],
-        arthur_data["power"],
-        arthur_data["hp"],
-    )
-    arthur.battle_preparation(
-        arthur_data["armour"], arthur_data["weapon"], arthur_data["potion"]
-    )
+    # return {
+    #     lancelot.name: lancelot.hp,
+    #     arthur.name: arthur.hp,
+    #     mordred.name: mordred.hp,
+    #     red_knight.name: red_knight.hp,
+    # }
 
-    mordred_data = knights_config["mordred"]
-
-    mordred = Knight(
-        mordred_data["name"], mordred_data["power"], mordred_data["hp"]
-    )
-    mordred.battle_preparation(
-        mordred_data["armour"], mordred_data["weapon"], mordred_data["potion"]
-    )
-
-    red_knight_data = knights_config["red_knight"]
-
-    red_knight = Knight(
-        red_knight_data["name"],
-        red_knight_data["power"],
-        red_knight_data["hp"],
-    )
-    red_knight.battle_preparation(
-        red_knight_data["armour"],
-        red_knight_data["weapon"],
-        red_knight_data["potion"],
-    )
-
-    Fight.fight(lancelot, mordred)
-    Fight.fight(red_knight, arthur)
-
-    return {
-        lancelot.name: lancelot.hp,
-        arthur.name: arthur.hp,
-        mordred.name: mordred.hp,
-        red_knight.name: red_knight.hp,
-    }
+    return {knight.name: knight.hp for knight in knights.values()}
 
 
 print(battle(KNIGHTS))
