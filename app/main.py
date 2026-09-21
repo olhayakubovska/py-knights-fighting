@@ -3,7 +3,7 @@ from app.fight import Fight
 from app.constants import KNIGHTS
 
 
-def build_knight(knight: dict):
+def build_knight(knight: dict) -> Knight:
     data = Knight(knight["name"], knight["power"], knight["hp"])
     data.battle_preparation(
         knight["armour"],
@@ -21,13 +21,6 @@ def battle(knights_config: dict) -> dict:
 
     Fight.fight(knights["lancelot"], knights["mordred"])
     Fight.fight(knights["red_knight"], knights["arthur"])
-
-    # return {
-    #     lancelot.name: lancelot.hp,
-    #     arthur.name: arthur.hp,
-    #     mordred.name: mordred.hp,
-    #     red_knight.name: red_knight.hp,
-    # }
 
     return {knight.name: knight.hp for knight in knights.values()}
 
